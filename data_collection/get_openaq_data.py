@@ -1,5 +1,7 @@
+import time
 import requests
 import pandas as pd
+import numpy as np
 from datetime import datetime
 
 def GetHourlyAverages(latitude, longitude, api_key, radius, limit):
@@ -141,7 +143,7 @@ def GetHourlyData(latitude, longitude, api_key, date_from, date_to, radius, limi
     radius : int
         Search radius (in meters) for nearby sensors.
     limit : int
-        Maximum number of locations to retrieve.
+        Maximum number of monitor locations to retrieve.
 
     Returns
     -------
@@ -211,7 +213,8 @@ def GetHourlyData(latitude, longitude, api_key, date_from, date_to, radius, limi
             measurements_params = {
                 'datetime_from': date_from,
                 'datetime_to': date_to,
-                'sort': 'asc'
+                'sort': 'asc',
+                'limit': limit_per_page
             }
 
             measurements_response = requests.get(measurements_url, headers=headers, params=measurements_params)
@@ -270,3 +273,76 @@ def GetHourlyData(latitude, longitude, api_key, date_from, date_to, radius, limi
     df = pd.DataFrame(all_data)
 
     return df
+
+def GetMarylandData(api_key, date_from, date_to, delay=60):
+    """
+    Fetches hourly environmental sensor data from OpenAQ for sensors within the maximum
+    and minimum coordinates for Maryland. Some sensors outside of maryland may lie in
+    this range, and therefore also have their data collected.
+
+    Parameters
+    ----------
+    api_key : str
+        API key to authenticate with the OpenAQ API.
+    date_from : str
+        Start date for data retrieval in 'YYYY-MM-DD' format.
+    date_to : str
+        End date for data retrieval in 'YYYY-MM-DD' format.
+    delay : int    
+        Time delay between each coordinate search.
+    
+    Returns
+    -------
+    pandas.DataFrame
+        A DataFrame containing hourly pollutant concentrations (or other measured 
+        quantities) at each sensor location. Includes metadata such as location name, 
+        geographic coordinates, parameter name, measured value and units, as well as 
+        the year, month, day, and hour of each measurement.
+
+    Notes
+    -----
+    - If no data is available for the specified timeframe or sensors, those sensors 
+      will be skipped.
+    - Data may include parameters beyond air pollutants (e.g., temperature, humidity).
+    - Due to API data retrieval constraints, this function will run for several hours.
+
+    Example
+    -------
+    >>> df = GetMarylandData(api_key, date_from='2020-01-01', date_to='2020-01-31', delay=60)
+    >>> print(df.head())
+          location_name   latitude   longitude  parameter  value  unit  year  month  day  hour
+    0    HU-Beltsville   39.055302  -76.878304     o3      0.032   ppm   2020     1     1     5
+    1    HU-Beltsville   39.055302  -76.878304     o3      0.033   ppm   2020     1     1     6
+    """
+
+    # Set the longitude and latitude bounds of MD and create a coordinate grid
+    lat_range = np.arange(37.9, 39.76, 0.25)   # South to North
+    lon_range = np.arange(-79.5, -74.9, 0.25)  # West to East
+    coordinate_pairs = [(lat, lon) for lat in lat_range for lon in lon_range]
+    coordinate_total = len(coordinate_pairs)
+
+    # Create a Maryland DataFrame to hold all of the data
+    md_df = pd.DataFrame()
+
+    # Collect data for Maryland
+    for i, (lat, lon) in enumerate(coordinate_pairs, start=1):
+        print(f'Checking for data near ({lat}, {lon})')
+        try:
+            df = GetHourlyData(lat, lon, api_key, date_from, date_to, radius=25000, limit=100)
+            if not df.empty:
+                md_df = pd.concat([md_df, df], ignore_index=True)
+        except Exception as e:
+            print(f'⚠️ Skipping ({lat}, {lon}) due to error: {e}')
+
+        print(f'Current number of DataFrame rows: {md_df.shape[0]}')
+        print(f'{i}/{coordinate_total} iterations complete, sleeping for {delay} seconds...')
+        time.sleep(delay)
+
+    # Remove any duplicates that are present
+    md_df.drop_duplicates(
+        subset=['latitude', 'longitude', 'parameter', 'value', 'unit', 'year', 'month', 'day', 'hour'],
+        keep="first",
+        inplace=True
+    )
+
+    return md_df
