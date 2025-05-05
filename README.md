@@ -4,4 +4,5 @@ This project collects and processes **hour-by-hour air quality data** using the 
 ### Requirements
 - [Python](https://www.python.org/)
 - [Pandas](https://pandas.pydata.org/)
+- [Numpy](https://numpy.org/)
 - [Requests](https://pypi.org/project/requests/)
