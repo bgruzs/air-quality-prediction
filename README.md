@@ -6,5 +6,7 @@ This project collects and processes **hour-by-hour air quality data** using the 
 - [Pandas](https://pandas.pydata.org/)
 - [Numpy](https://numpy.org/)
 - [Matplotlib](https://matplotlib.org/)
+- [Scikit-learn](https://scikit-learn.org/stable/)
 - [Requests](https://pypi.org/project/requests/)
 - [Geopy](https://geopy.readthedocs.io/en/stable/#)
+- [Meteostat](https://dev.meteostat.net/)
