@@ -12,6 +12,8 @@ This project collects and processes **hour-by-hour air quality data** using the 
 - [Meteostat](https://dev.meteostat.net/)
 
 ### Directory Structure
+The directories and files in this repository are organized as follows:
+
 - `/analysis`: Contains code for analysis of the collected data.
     - `idw_interpolation.py`: Contains one function used to implement inverse distance weighting (IDW) interpolation.
 
