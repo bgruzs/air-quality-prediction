@@ -15,7 +15,7 @@ This project collects and processes **hour-by-hour air quality data** using the 
 The directories and files in this repository are organized as follows:
 
 - `/analysis`: Contains code for analysis of the collected data.
-    - `idw_interpolation.py`: Contains one function used to implement inverse distance weighting (IDW) interpolation.
+    - `idw_interpolation.py`: Contains functions used to implement inverse distance weighting (IDW) interpolation and parity plotting.
 
 - `/data_collection`: Contains code for collecting data using the [OpenAQ API](https://docs.openaq.org/).
     - `get_openaq_data.py`: Includes three functions used to collect pollutant data.
