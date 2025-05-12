@@ -1,5 +1,5 @@
 # air-quality-prediction
-This project collects and processes **hour-by-hour air quality data** using the [OpenAQ API](https://docs.openaq.org/) to make air quality predictions at locations where air quality monitoring sites are not present.
+This project collects and processes **hour-by-hour air quality data** using the [OpenAQ API](https://docs.openaq.org/) to make air quality predictions at locations where air quality monitoring sites are not present via two methods. In one method, inverse distance weighting (IDW) interpolation is deployed to make pollutant concentration predictions from nearby pollutant concentration data. A second method deploys machine-learning to make pollutant concentration predictions, using meteorological data as features for the predictions.
 
 ## Requirements
 - [Python](https://www.python.org/)
@@ -26,6 +26,7 @@ The directories and files in this repository are organized as follows:
 
 - `/notebooks`: Contains Jupyter notebooks used to analyze and make predictions from raw data.
     - `interpolation.ipynb`: Jupyter notebook used to implement IDW interpolation.
+    - `pollutant_results.json`: JSON file containing interpolation statistics.
 
 - `/raw_data`: Contains the raw data collected from the scripts in `/data_scripts`.
     - `maryland_2020_with_weather.csv`: CSV file containing pollutant and weather data for all of 2020.
