@@ -27,8 +27,16 @@ The directories and files in this repository are organized as follows:
 - `/notebooks`: Contains Jupyter notebooks used to analyze and make predictions from raw data.
     - `interpolation.ipynb`: Jupyter notebook used to implement IDW interpolation.
     - `pollutant_results.json`: JSON file containing interpolation statistics.
+    - `Random_Forest.ipynb`: Jupyter notebook used to implement random forest regression.
+    - `Ridge Regression.ipynb`: Jupyter notebook used to implement ridge regression.
 
 - `/raw_data`: Contains the raw data collected from the scripts in `/data_scripts`.
     - `maryland_2020_with_weather.csv`: CSV file containing pollutant and weather data for all of 2020.
     - `maryland_all_data_2020.csv`: CSV file containing all of the Maryland area pollutant data for 2020.
     - `maryland_data_2020_*`: CSV files containing Maryland area pollutant data for each month in 2020.
+
+## Contributors
+- [@bgruzs](https://github.com/bgruzs)
+- [@DHildt](https://github.com/DHildt)
+- [@jdayie](https://github.com/jdayie)
+- [@Michaeldinnan](https://github.com/Michaeldinnan)
